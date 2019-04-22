@@ -19,6 +19,7 @@ type Message interface {
 
 func (m TextMessage) foo()    {} // Message interface
 func (m GenericMessage) foo() {} // Message interface
+func (qr QuickReply) foo()    {}
 
 const (
 	// ButtonTypeWebURL is type for web links
@@ -57,8 +58,25 @@ type GenericMessage struct {
 	NotificationType NotificationType      `json:"notification_type,omitempty"`
 }
 
+type QuickReply struct {
+	Message   quickReplyMessageContent `json:"message"`
+	Recipient recipient                `json:"recipient"`
+}
+
 type recipient struct {
 	ID int64 `json:"id,string"`
+}
+
+type quickReplyMessageContent struct {
+	Text         string             `json:"text,omitempty"`
+	QuickReplies []QuickReplyObject `json:"quick_replies,omitempty"`
+}
+
+type QuickReplyObject struct {
+	ContentType string `json:"content_type"`
+	Title       string `json:"title"`
+	Payload     string `json:"payload"`
+	ImageURL    string `json:"image_url"`
 }
 
 type textMessageContent struct {
@@ -118,6 +136,32 @@ func (msng Messenger) NewGenericMessage(userID int64) GenericMessage {
 			},
 		},
 	}
+}
+
+func (msgn Messenger) NewQuickReplyMessage(userID int64, text string) QuickReply {
+	return QuickReply{
+		Recipient: recipient{ID: userID},
+		Message: quickReplyMessageContent{
+			Text: text,
+		},
+	}
+}
+
+func newQuickReplyObject(content_type, title, payload, imageURL string) QuickReplyObject {
+	return QuickReplyObject{
+		ContentType: content_type,
+		Title:       title,
+		Payload:     payload,
+		ImageURL:    imageURL,
+	}
+}
+
+func (qr QuickReply) AddQuickReplyObject(qro QuickReplyObject) {
+	qr.Message.QuickReplies = append(qr.Message.QuickReplies, qro)
+}
+
+func (qr QuickReply) AddNewQuickReplyObject(content_type, title, payload, imageURL string) {
+	qr.AddQuickReplyObject(newQuickReplyObject(content_type, title, payload, imageURL))
 }
 
 // AddNewElement adds element to Generic template message with defined title, subtitle, link url and image url
