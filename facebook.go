@@ -25,11 +25,11 @@ type FacebookRequest struct {
 
 // FacebookMessage struct for text messaged received from facebook server as part of FacebookRequest struct
 type FacebookMessage struct {
-	Mid         string            `json:"mid"`
-	Seq         int               `json:"seq"`
-	Text        string            `json:"text"`
-	Attachments []Attachment      `json:"attachments"`
-	QuickReply  QuickReplyPayload `json:"quick_reply"`
+	Mid         string             `json:"mid"`
+	Seq         int                `json:"seq"`
+	Text        string             `json:"text"`
+	Attachments []Attachment       `json:"attachments"`
+	QuickReply  *QuickReplyPayload `json:"quick_reply"`
 }
 
 type QuickReplyPayload struct {
