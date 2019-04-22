@@ -156,11 +156,11 @@ func newQuickReplyObject(content_type, title, payload, imageURL string) QuickRep
 	}
 }
 
-func (qr QuickReply) AddQuickReplyObject(qro QuickReplyObject) {
+func (qr *QuickReply) AddQuickReplyObject(qro QuickReplyObject) {
 	qr.Message.QuickReplies = append(qr.Message.QuickReplies, qro)
 }
 
-func (qr QuickReply) AddNewQuickReplyObject(content_type, title, payload, imageURL string) {
+func (qr *QuickReply) AddNewQuickReplyObject(content_type, title, payload, imageURL string) {
 	qr.AddQuickReplyObject(newQuickReplyObject(content_type, title, payload, imageURL))
 }
 
