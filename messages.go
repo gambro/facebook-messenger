@@ -51,6 +51,20 @@ type TextMessage struct {
 	NotificationType NotificationType   `json:"notification_type,omitempty"`
 }
 
+type FileMessage struct {
+	Recepient recipient   `json:"recepient"`
+	Message   fileContent `json:"message"`
+}
+
+type fileContent struct {
+	Attachment *fileAttachment `json:"attachment,omitempty"`
+}
+
+type fileAttachment struct {
+	Type    string      `json:"type,omitempty"`
+	Payload filePayload `json:"payload,omitempty"`
+}
+
 // GenericMessage struct used for sending structural messages to messenger (messages with images, links, and buttons)
 type GenericMessage struct {
 	Message          genericMessageContent `json:"message"`
@@ -95,6 +109,11 @@ type attachment struct {
 type payload struct {
 	TemplateType string    `json:"template_type,omitempty"`
 	Elements     []Element `json:"elements,omitempty"`
+}
+
+type filePayload struct {
+	URL      string `json:"url"`
+	Reusable bool   `json:"is_reusable"`
 }
 
 // Element in Generic Message template attachment
@@ -143,6 +162,21 @@ func (msgn Messenger) NewQuickReplyMessage(userID int64, text string) QuickReply
 		Recipient: recipient{ID: userID},
 		Message: quickReplyMessageContent{
 			Text: text,
+		},
+	}
+}
+
+func (msgn Messenger) NewFileMessage(userID int64, fileType, url string) *FileMessage {
+	return &FileMessage{
+		Recepient: recipient{ID: userID},
+		Message: fileContent{
+			Attachment: &fileAttachment{
+				Type: fileType,
+				Payload: filePayload{
+					URL:      url,
+					Reusable: true,
+				},
+			},
 		},
 	}
 }
