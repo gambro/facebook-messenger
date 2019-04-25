@@ -113,8 +113,7 @@ type payload struct {
 }
 
 type filePayload struct {
-	URL      string `json:"url"`
-	Reusable bool   `json:"is_reusable"`
+	URL string `json:"url"`
 }
 
 // Element in Generic Message template attachment
@@ -174,8 +173,7 @@ func (msgn Messenger) NewFileMessage(userID int64, fileType, url string) *FileMe
 			Attachment: &fileAttachment{
 				Type: fileType,
 				Payload: filePayload{
-					URL:      url,
-					Reusable: true,
+					URL: url,
 				},
 			},
 		},
