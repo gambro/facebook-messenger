@@ -20,6 +20,7 @@ type Message interface {
 func (m TextMessage) foo()    {} // Message interface
 func (m GenericMessage) foo() {} // Message interface
 func (qr QuickReply) foo()    {}
+func (fm FileMessage) foo()   {}
 
 const (
 	// ButtonTypeWebURL is type for web links
