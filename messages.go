@@ -53,7 +53,7 @@ type TextMessage struct {
 }
 
 type FileMessage struct {
-	Recepient recipient   `json:"recepient"`
+	Recipient recipient   `json:"recipient"`
 	Message   fileContent `json:"message"`
 }
 
@@ -168,7 +168,7 @@ func (msgn Messenger) NewQuickReplyMessage(userID int64, text string) QuickReply
 
 func (msgn Messenger) NewFileMessage(userID int64, fileType, url string) *FileMessage {
 	return &FileMessage{
-		Recepient: recipient{ID: userID},
+		Recipient: recipient{ID: userID},
 		Message: fileContent{
 			Attachment: &fileAttachment{
 				Type: fileType,
