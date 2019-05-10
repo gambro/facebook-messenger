@@ -8,6 +8,7 @@ import (
 )
 
 const apiURL = "https://graph.facebook.com/v2.6/"
+const profileURL = "https://graph.facebook.com/"
 
 // TestURL to mock FB server, used for testing
 var TestURL = ""
@@ -18,8 +19,9 @@ type Messenger struct {
 	VerifyToken string
 	PageID      string
 
-	apiURL  string
-	pageURL string
+	apiURL     string
+	pageURL    string
+	profileURL string
 
 	// MessageReceived event fires when message from Facebook received
 	MessageReceived func(msng *Messenger, userID int64, m FacebookMessage)
@@ -58,6 +60,19 @@ func (msng *Messenger) SendMessage(m Message) (FacebookResponse, error) {
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
+	if err != nil {
+		return FacebookResponse{}, err
+	}
+
+	return decodeResponse(resp)
+}
+
+// Get profile client from PSID (receiverID)
+func (msng *Messenger) GetProfile(psid string) (FacebookResponse, error) {
+	if msng.profileURL == "" {
+		msng.profileURL = profileURL + psid + "?fields=first_name,last_name,profile_pic&access_token=" + msng.AccessToken
+	}
+	resp, err := http.Get(msng.profileURL)
 	if err != nil {
 		return FacebookResponse{}, err
 	}
@@ -132,5 +147,11 @@ func decodeResponse(r *http.Response) (FacebookResponse, error) {
 	return FacebookResponse{
 		MessageID:   fbResp.MessageID,
 		RecipientID: fbResp.RecipientID,
+		FirstName:   fbResp.FirstName,
+		LastName:    fbResp.LastName,
+		ProfileURL:  fbResp.ProfileURL,
+		Locale:      fbResp.Locale,
+		Timezone:    fbResp.Timezone,
+		Gender:      fbResp.Gender,
 	}, nil
 }

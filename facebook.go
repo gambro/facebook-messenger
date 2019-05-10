@@ -64,6 +64,12 @@ type FacebookPostback struct {
 type rawFBResponse struct {
 	MessageID   string         `json:"message_id"`
 	RecipientID int64          `json:"recipient_id,string"`
+	FirstName   string         `json:"first_name"`
+	LastName    string         `json:"last_name"`
+	ProfileURL  string         `json:"profile_pic"`
+	Locale      string         `json:"locale"`
+	Timezone    int            `json:"timezone"`
+	Gender      string         `json:"gender"`
 	Error       *FacebookError `json:"error"`
 }
 
@@ -71,6 +77,12 @@ type rawFBResponse struct {
 type FacebookResponse struct {
 	MessageID   string `json:"message_id"`
 	RecipientID int64  `json:"recipient_id,string"`
+	FirstName   string `json:"first_name"`
+	LastName    string `json:"last_name"`
+	ProfileURL  string `json:"profile_pic"`
+	Locale      string `json:"locale"`
+	Timezone    int    `json:"timezone"`
+	Gender      string `json:"gender"`
 }
 
 // FacebookError received form Facebook server if sending messages failed
